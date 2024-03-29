@@ -12,3 +12,56 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+
+model User {
+  id   Int   @id @default(autoincrement())
+  name String?
+  username String
+  firstname String
+  lastname String
+
+  attendees Attendee[]
+}
+
+model Event{
+  id Int @id @default(autoincrement())
+
+  title String
+  description  String
+  startime DateTime @default(now())
+  expiresAt  DateTime
+  organizer String
+  location String
+  image String
+  price Float?
+  isfree Boolean
+  tickets Tickets[]
+  attendees Attendee[]
+}
+
+model Tickets{
+  id Int @id @default(autoincrement())
+  event  Event @relation(fields: [eventID] ,references: [id])
+  eventID Int
+  price Float
+  status String
+ 
+}
+
+model Attendee{
+  id  Int   @id @default(autoincrement())
+  user User @relation(fields: [userID] , references: [id])
+  event Event @relation(fields: [eventId] , references: [id])
+  eventId Int
+  userID Int
+  status String
+}
+
+model Category{
+  id Int @id @default(autoincrement())
+  title String
+  description String
+}
+
+
