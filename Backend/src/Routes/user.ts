@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { sign } from "hono/jwt";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { PrismaClient } from "@prisma/client/edge";
-import { SigninBody, signupBody } from "@lalitwagh/eventmanage-web-common";
+import { signinBody, signupBody } from "@lalitwagh/eventmanage-web-common";
 
 
 
@@ -40,6 +40,7 @@ userRouter.post('/signup' ,  async(c) =>{
         },c.env.JWT_SECRET)
 
         return c.text(jwt)
+
     }catch(error){
         console.log(error)
         c.status(411);
@@ -49,10 +50,46 @@ userRouter.post('/signup' ,  async(c) =>{
 
 
 userRouter.post('/signin' ,  async(c) =>{
+    const body = await c.req.json();
+    const {success} = signinBody.safeParse(body);
+    if(!success){
+       return c.json({
+        message:"Inputs are Incorrect"
+       })
+    }
 
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,
-      }).$extends(withAccelerate())
+    }).$extends(withAccelerate())
+
+    try{
+        const user = await prisma.user.findFirst({
+            where:{
+                username:body.username,
+                password:body.password
+            }
+        })
+
+        if(!user){
+            c.status(403)
+            return c.json({
+                message:"User DoesNot Exist Please Signup"
+            })
+        }
+      
+        const jwt = await sign({
+            id:user.id
+        },c.env.JWT_SECRET)
+
+        return c.text(jwt)
+       
+
+    }catch(error){
+        console.log(error)
+        c.status(411);
+        return c.text("Invalid")
+    }
+
 
 })
 
