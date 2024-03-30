@@ -11,11 +11,15 @@
   },
   "dependencies": {
     "@clerk/clerk-react": "^4.30.7",
+    "@lalitwagh/eventmanage-common": "^1.0.0",
+    "@lalitwagh/eventmanage-web-common": "^1.0.0",
+    "axios": "^1.6.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.3"
   },
   "devDependencies": {
+    "@types/node": "^20.12.2",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
