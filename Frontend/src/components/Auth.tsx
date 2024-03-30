@@ -4,6 +4,10 @@ import { SignupBody } from "@lalitwagh/eventmanage-web-common";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {BACKEND_URL} from "../config"
+import { toast } from "react-toastify";
+
+
+
 
 export const Auth =({type}:{type:"signup" | "signin"})=>{
     const navigate = useNavigate()
@@ -23,6 +27,8 @@ export const Auth =({type}:{type:"signup" | "signin"})=>{
         }catch(err){
             console.log(err)
             alert("Error While login")
+            
+            
         }
     }
 
